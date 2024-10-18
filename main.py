@@ -1,36 +1,25 @@
-import pyautogui as gui
+#import pyautogui as gui
 import cv2
 import numpy as np
+import pytesseract as tess
+from PIL import Image
+import get_text_from_image as gtfi
+# Set the path to the Tesseract executable
+tess.pytesseract.tesseract_cmd = r"C:\Program Files\Tesseract-OCR\tesseract.exe"
 
-import matplotlib.pyplot as plt
+text = []
+# get text from file
+textFromImage = gtfi.get_text_from_image("studentCard1.jpg")
 
-# Data
-sieve_sizes = np.array([26.5, 19, 13.2, 4.75, 2, 0.425, 0.075])
-percentage_passing = np.array([96.19, 48.6, 33.4, 16.4, 9.1, 3.4, 0])
+split_data = textFromImage.split('\n')
+for line in split_data:
+    text.append(line)
+    
+    
+student_number = text[2]
+student_name = text[4]
+field_of_study = text[7]
+qualification_level = text[8]
 
-# Create the plot
-plt.figure(figsize=(10, 6))
-plt.semilogx(sieve_sizes, percentage_passing, 'bo-')
-plt.grid(True, which="both", ls="-", alpha=0.5)
-
-# Set labels and title
-plt.xlabel('Sieve Size (mm)')
-plt.ylabel('Percentage Passing (%)')
-plt.title('Sieve Analysis Graph')
-
-# Set x-axis
-plt.xlim(0.01, 100)
-plt.xticks([0.1, 1, 10, 100], ['0.1', '1', '10', '100'])
-
-# Set y-axis
-plt.ylim(0, 100)
-
-# Add data labels
-for x, y in zip(sieve_sizes, percentage_passing):
-    plt.annotate(f'{y:.1f}%', (x, y), textcoords="offset points", xytext=(0,10), ha='center')
-
-# Save the plot as a high-resolution PNG file
-plt.savefig('sieve_analysis_graph.png', dpi=300, bbox_inches='tight')
-
-print("Graph has been saved as 'sieve_analysis_graph.png'")
-# gui.alert(text='MATCH FOUND', title='Match Found', button='OK')
+print(f'Student Number: {student_number} \n Student Name: {student_name} \n Field of Study: {field_of_study} \n Qualification Level: {qualification_level}')
+# text.append(textFromImage.strip('\n'))
